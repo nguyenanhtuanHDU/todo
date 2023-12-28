@@ -27,6 +27,7 @@ import { ExcelComponent } from './shared/components/excel/excel.component';
 import { TruncatePipe } from './shared/pipes/truncate.pipe';
 import { CapitalizePipe } from './shared/pipes/capitalize.pipe';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 registerLocaleData(en);
 const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
@@ -57,7 +58,8 @@ const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
     ToastrModule.forRoot(),
     ModalModule.forRoot(),
     PaginationModule.forRoot(),
-    NzSelectModule
+    NzSelectModule,
+    MatProgressBarModule
   ],
   providers: [signUpGuard, authGuard, { provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

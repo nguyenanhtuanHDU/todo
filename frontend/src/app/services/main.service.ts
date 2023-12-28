@@ -14,8 +14,19 @@ export class MainService extends BaseService {
     super();
   }
 
+  loadingSubject = new BehaviorSubject<boolean>(false)
+  loading = this.loadingSubject.asObservable().pipe(distinctUntilChanged())
+
   listUserSubject = new BehaviorSubject<IUser[]>([] as IUser[])
   listUser = this.listUserSubject.asObservable().pipe(distinctUntilChanged())
+
+  activeLoading() {
+    this.loadingSubject.next(true)
+  }
+
+  hiddenLoading() {
+    this.loadingSubject.next(false)
+  }
 
   auth = {
     loginGoogle: () => this.http.get(this.createUrl(['auth', 'google']))

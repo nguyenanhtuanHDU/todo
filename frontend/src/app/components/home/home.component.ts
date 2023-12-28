@@ -57,15 +57,19 @@ export class HomeComponent {
   }
 
   getAllUser(username?: string) {
+    this.mainService.activeLoading()
     this.mainService.users.getAll(this.page, 3, username).subscribe(res => {
+      this.mainService.hiddenLoading()
       this.listUsers = res.data
       this.totalItem = res.totalItem
-      this.labelSort = Object.keys(res.data[0]).filter(i => !['__v', 'roles'].includes(i) )
+      this.labelSort = Object.keys(res.data[0]).filter(i => !['__v', 'roles'].includes(i))
     })
   }
 
   sortUser(sortBy: string) {
+    this.mainService.activeLoading()
     this.mainService.users.getAll(this.page, 3, '', sortBy).subscribe(res => {
+      this.mainService.hiddenLoading()
       this.listUsers = res.data
     })
   }
@@ -88,6 +92,7 @@ export class HomeComponent {
   }
 
   onSubmit() {
+    this.mainService.activeLoading()
     if (this.form.valid) {
       this.mainService.users.create(this.form.value).pipe(
         takeUntil(this.destroy),
@@ -97,12 +102,14 @@ export class HomeComponent {
         })
       ).subscribe(
         (res) => {
+          this.mainService.hiddenLoading()
           if (res) {
             this.toast.success(res.message ?? 'Create success');
           }
         }
       );
     } else {
+      this.mainService.hiddenLoading()
       this.toast.error("Form is not valid")
     }
   }
@@ -117,20 +124,24 @@ export class HomeComponent {
   }
 
   onDelete(id: string) {
-    this.mainService.users.delete(id).pipe(
-      takeUntil(this.destroy),
-      catchError((err) => {
-        this.toast.error(err?.error?.message ?? 'Delete error');
-        return of(null);
-      })
-    ).subscribe(
-      (res) => {
-        if (res) {
-          this.toast.success(res.message ?? 'Delete success');
-          this.getAllUser()
+    if (confirm('Delete ?')) {
+      this.mainService.activeLoading()
+      this.mainService.users.delete(id).pipe(
+        takeUntil(this.destroy),
+        catchError((err) => {
+          this.toast.error(err?.error?.message ?? 'Delete error');
+          return of(null);
+        })
+      ).subscribe(
+        (res) => {
+          this.mainService.hiddenLoading()
+          if (res) {
+            this.toast.success(res.message ?? 'Delete success');
+            this.getAllUser()
+          }
         }
-      }
-    );
+      );
+    }
   }
 
   goToChat() {
