@@ -1,0 +1,16 @@
+<div class="container d-flex flex-column align-items-center justify-content-center">
+    <h1 class="text-center">Sign In</h1>
+    <form action="" class="form d-flex flex-column gap-3 mt-3" [formGroup]="form" (submit)="onSubmit()">
+        <input type="text" class="form-control" placeholder="username" formControlName="username">
+        <input type="text" class="form-control" placeholder="password" formControlName="password">
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+
+    <div id="g_id_onload" data-client_id="57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com"
+        data-context="signin" data-ux_mode="popup" data-login_uri="http://localhost:8000/api/v1/auth/google"
+        data-nonce="" data-itp_support="true">
+    </div>
+    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+        data-text="continue_with" data-size="large" data-logo_alignment="left">
+    </div>
+</div>

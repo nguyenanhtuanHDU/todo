@@ -1,0 +1,5 @@
+<form class="my-4 d-flex flex-column gap-2 p-4" style="width: 500px;" [formGroup]="form" (submit)="onSubmit()">
+    <input #input placeholder="username" class="form-control" formControlName="username" />
+    <input placeholder="city" class="form-control" formControlName="city" />
+    <button class="btn btn-success" type="submit">Submit</button>
+</form>

@@ -5,4 +5,5 @@ export interface IResponse<T> {
     message: 'Success' | 'Error'
     subMessage: string
     data: T
+    totalItem?: number
 } 

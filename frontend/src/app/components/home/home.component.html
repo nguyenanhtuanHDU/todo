@@ -1,0 +1,57 @@
+<ng-scrollbar style="height: 100vh;">
+    <div class="container mt-5">
+        <div class="d-flex gap-3 justify-content-start">
+            <button class="btn btn-primary" disabled routerLink="/sign-up">Sign up</button>
+            <button class="btn btn-primary" (click)="getAllUser()">Get all users</button>
+            <button class="btn btn-primary" (click)="goToChat()">Chat</button>
+            <button class="btn btn-danger" (click)="logout()">Logout</button>
+        </div>
+    
+        <form [formGroup]="formSearch" class="mt-4">
+            <input placeholder="search" class="form-control" formControlName="username" />
+        </form>
+    
+        <div class="d-flex gap-2 py-4">
+            <form class="d-flex gap-2" style="width: 500px;" [formGroup]="form" (submit)="onSubmit()">
+                <input placeholder="username" class="form-control" formControlName="username" />
+                <input placeholder="password" class="form-control" formControlName="password" />
+                <input placeholder="city" class="form-control" formControlName="city" />
+                <button class="btn btn-success" type="submit">Create</button>
+            </form>
+            <button class="btn btn-info h-auto" (click)="resetForm()">Clear</button>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Sort by" [(ngModel)]="sortSelect"
+                (ngModelChange)="onSortChange($event)" style="width: 200px;">
+                <nz-option *ngFor="let item of labelSort" [nzLabel]="item" [nzValue]="item"></nz-option>
+            </nz-select>
+            <button class="btn btn-dark h-auto" (click)="onOpenExcel()">Excel</button>
+        </div>
+        <span *ngIf="listUsers && listUsers.length === 0">No data</span>
+        <table class="table p-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th *ngFor="let item of labelSort">{{item | capitalize: 10}}</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of users$ | async; index as i" class="my-2">
+                    <td>{{item._id | truncate:[10] }}</td>
+                    <td>{{item.username! | truncate:[20] }}</td>
+                    <td>{{item.password! | truncate:[20] }}</td>
+                    <td>{{item.city}}</td>
+                    <td>{{item.createdAt | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{item.updatedAt | date: 'dd/MM/yyyy'}}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-danger" (click)="onDelete(item._id)">Delete</button>
+                            <button class="btn btn-info " (click)="onView(item, i)">Edit</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination [totalItems]="totalItem * (10/3)" [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)">
+        </pagination>
+        <!-- 88 -> 9 trang -->
+    </div>
+</ng-scrollbar>

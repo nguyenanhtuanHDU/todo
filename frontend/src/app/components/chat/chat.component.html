@@ -1,0 +1,13 @@
+<div class="container chat">
+    <form class="chat-message">
+        <div>username: <strong>{{ username }}</strong></div>
+        <input type="text" [(ngModel)]="message">
+        <button (click)="send()">send</button>
+    </form>
+    <div class="d-flex flex-column gap-4">
+        <div [ngClass]="{'ms-auto': username === item.username}" *ngFor="let item of messages | async">
+            <strong>{{item.username}}</strong>
+            <div>{{item.message}}</div>
+        </div>
+    </div>
+</div>
