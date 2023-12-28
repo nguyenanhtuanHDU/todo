@@ -154,7 +154,9 @@ export class HomeComponent {
   }
 
   logout() {
-    this.authService.removeToken()
-    this.router.navigate(['sign-in'])
+    if(confirm("Logout ?")){
+      this.authService.removeToken()
+      this.router.navigate(['sign-in'])
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
+import { BehaviorSubject, Subject, distinctUntilChanged, map } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 import { IChat } from '../shared/models/chat.model';
 import { CookieService } from 'ngx-cookie-service';
@@ -10,6 +10,9 @@ import { CookieService } from 'ngx-cookie-service';
 export class SocketService {
   chatSubject = new BehaviorSubject<IChat[]>([])
   chat = this.chatSubject.asObservable().pipe(distinctUntilChanged())
+
+  newMessageSubject = new Subject<void>();
+  newMessage$ = this.newMessageSubject.asObservable();
 
   constructor(
     private socket: Socket,
@@ -44,9 +47,8 @@ export class SocketService {
 
   getMessage() {
     this.socket.on('events', (data: IChat) => {
-      console.log("🚀 ~ data:", data)
       this.chatSubject.next([...this.chatSubject.getValue(), data])
-      console.log("🚀 ~ this.chatSubject.getValue():", this.chatSubject.getValue())
+      this.newMessageSubject.next();
     });
   }
 }

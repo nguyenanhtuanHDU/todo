@@ -4,8 +4,17 @@
 
     &-message {
         position: absolute;
-        bottom: 10px;
-        right: 50%;
+        bottom: 30px;
+        left: 50%;
         transform: translateX(-50%);
+    }
+}
+
+.messages{
+    &-item{
+        &-content{
+            border-radius: 12px;
+            width: fit-content;
+        }
     }
 }

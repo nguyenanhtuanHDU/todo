@@ -1,13 +1,17 @@
-<div class="container chat">
-    <form class="chat-message">
-        <div>username: <strong>{{ username }}</strong></div>
-        <input type="text" [(ngModel)]="message">
-        <button (click)="send()">send</button>
+<div class="container chat d-flex flex-column align-items-center">
+    <form class="chat-message d-flex gap-2 align-items-center">
+        <div class="d-flex gap-1">username: <strong>{{ username }}</strong></div>
+        <input type="text" class="form-control" [(ngModel)]="message" [ngModelOptions]="{standalone: true}">
+        <button class="btn btn-primary" (click)="send()" type="submit">send</button>
     </form>
-    <div class="d-flex flex-column gap-4">
-        <div [ngClass]="{'ms-auto': username === item.username}" *ngFor="let item of messages | async">
-            <strong>{{item.username}}</strong>
-            <div>{{item.message}}</div>
+    <ng-scrollbar #scroll style="width: 600px; height: 550px; padding: 20px;">
+        <div class="d-flex flex-column gap-4 messages">
+            <div class="messages-item" [ngClass]="{'ms-auto': username === item.username}"
+                *ngFor="let item of messages | async">
+                <strong [ngClass]="{'ms-auto': username === item.username}">{{item.username}}</strong>
+                <div [ngClass]="username === item.username ? 'bg-primary' : 'bg-info'"
+                    class="messages-item-content p-2  text-white">{{item.message}}</div>
+            </div>
         </div>
-    </div>
+    </ng-scrollbar>
 </div>
