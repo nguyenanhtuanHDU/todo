@@ -41,13 +41,18 @@ export class UserService {
 
     // @Interval(1000)
     async findAll(query: any): Promise<any> {
-        const { page, limit, username, sortBy } = query;
-        // this.logger.log('Calling getHello()', AppController.name);
-        // this.logger.debug('Calling getHello()', AppController.name);
-        // this.logger.verbose('Calling getHello()', AppController.name);
-        // this.logger.warn('Calling getHello()', AppController.name);
-        const data = await this.userModel.find({ username: { $regex: username } }).sort('' + sortBy).skip((page - 1) * limit).limit(limit)
-        return data
+        try {
+            const { page, limit, username, sortBy } = query;
+            // this.logger.log('Calling getHello()', AppController.name);
+            // this.logger.debug('Calling getHello()', AppController.name);
+            // this.logger.verbose('Calling getHello()', AppController.name);
+            // this.logger.warn('Calling getHello()', AppController.name);
+            const data = await this.userModel.find({ username: { $regex: username } }).sort('' + sortBy).skip((page - 1) * limit).limit(limit)
+            return data
+        } catch (error) {
+            console.log("🚀 ~ error:", error)
+            throw new BadRequestException("Server error");
+        }
     }
 
     async getTotalUsers(): Promise<number> {
@@ -65,7 +70,8 @@ export class UserService {
             return await this.userModel.create(user)
 
         } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_REQUEST);
+            console.log("🚀 ~ error:", error)
+            throw new BadRequestException("Server error");
         }
     }
 
@@ -77,7 +83,8 @@ export class UserService {
             }
             return await this.userModel.findByIdAndUpdate(id, command, { new: true })
         } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_REQUEST);
+            console.log("🚀 ~ error:", error)
+            throw new BadRequestException("Server error");
         }
     }
 
@@ -91,7 +98,7 @@ export class UserService {
             return deletedUser
         } catch (error) {
             console.log("🚀 ~ error:", error)
-            throw new HttpException(error, HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Server error");
         }
     }
 
@@ -101,7 +108,7 @@ export class UserService {
             return null
         } catch (error) {
             console.log("🚀 ~ error:", error)
-            throw new HttpException(error, HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Server error");
         }
     }
 }

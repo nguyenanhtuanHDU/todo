@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -13,12 +13,18 @@ export class AuthService {
     }
 
     async login(data: LoginUserDTO): Promise<any> {
-        const userFind = await this.userService.findUserAuth(data)
-        if (!userFind) {
-            throw new NotFoundException('User not found')
+        try {
+            const userFind = await this.userService.findUserAuth(data)
+            if (!userFind) {
+                throw new NotFoundException('User not found')
+            }
+            const payload = { username: userFind.username, city: userFind.city }
+            const accessToken = await this.jwtService.signAsync(payload)
+            return { accessToken }
+        } catch (error) {
+            console.log("🚀 ~ error:", error)
+            throw new BadRequestException("Server error");
         }
-        const payload = { username: userFind.username, city: userFind.city }
-        const accessToken = await this.jwtService.signAsync(payload)
-        return { accessToken }
+
     }
 }
